@@ -4,16 +4,34 @@ function YearPage() {
   const { branchSlug, semesterSlug, subjectSlug, year } = useParams()
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6 text-slate-800">
-      <div className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-          Year Papers
-        </p>
-        <h1 className="text-3xl font-bold text-slate-900">
-          {branchSlug} / {semesterSlug} / {subjectSlug} / {year}
-        </h1>
-      </div>
-    </div>
+    <main className="page-shell">
+      <section className="page-card">
+        <div className="page-header">
+          <div>
+            <p className="section-kicker">Year Papers</p>
+            <h1>{year}</h1>
+          </div>
+          <span className="pill-badge">{branchSlug}</span>
+        </div>
+
+        <p className="page-lead">Selected exam papers from {year} for {subjectSlug} in {semesterSlug}.</p>
+
+        <div className="info-grid">
+          <div className="mini-card">
+            <div className="mini-card-icon">📄</div>
+            <p>Question paper - Set A</p>
+          </div>
+          <div className="mini-card">
+            <div className="mini-card-icon">📄</div>
+            <p>Question paper - Set B</p>
+          </div>
+          <div className="mini-card">
+            <div className="mini-card-icon">📄</div>
+            <p>Answer key</p>
+          </div>
+        </div>
+      </section>
+    </main>
   )
 }
 

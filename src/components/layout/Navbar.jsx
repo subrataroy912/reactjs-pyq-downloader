@@ -1,16 +1,29 @@
 function Navbar() {
   return (
-    <nav className="border-b border-slate-200 bg-white">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <div className="text-lg font-bold text-slate-900">PyQ Downloader</div>
-        <div className="flex gap-4 text-sm text-slate-700">
-          <a href="/" className="hover:text-slate-900">Home</a>
-          <a href="/latest-papers" className="hover:text-slate-900">Latest</a>
-          <a href="/branches" className="hover:text-slate-900">Branches</a>
-          <a href="/search" className="hover:text-slate-900">Search</a>
+    <header className="top-navbar">
+      <div className="nav-inner">
+        <div className="brand-block">
+          <div className="brand-icon">📖</div>
+          <div className="brand-text">
+            <span className="brand-title">WB Diploma PYQ</span>
+            <span className="brand-subtitle">Previous Year Question Papers</span>
+          </div>
+        </div>
+
+        <nav className="main-nav" aria-label="Main navigation">
+          <a href="/" className="active">Home</a>
+          <a href="/branches">Branches</a>
+          <a href="/semesters">Semesters</a>
+          <a href="/latest-papers">Latest Papers</a>
+          <a href="/about">About</a>
+        </nav>
+
+        <div className="nav-actions">
+          <button type="button" className="icon-button" aria-label="Search">⌕</button>
+          <button type="button" className="icon-button" aria-label="Theme">◉</button>
         </div>
       </div>
-    </nav>
+    </header>
   )
 }
 
