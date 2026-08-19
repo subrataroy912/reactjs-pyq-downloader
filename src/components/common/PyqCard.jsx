@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function PyqCard({ branch, semester, year, subject, size, downloadLink, isNew }) {
   return (
     <article className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
@@ -11,10 +13,7 @@ export default function PyqCard({ branch, semester, year, subject, size, downloa
         <span className="text-blue-600">▤</span> {size}
       </p>
 
-      <div className="grid grid-cols-2 gap-4">
-        <a href={downloadLink} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-xl font-bold text-blue-700 hover:bg-blue-100">
-          <span>◉</span> View
-        </a>
+      <div className="flex items-center justify-center w-full gap-4">
         <a href={downloadLink} download className="flex items-center justify-center gap-3 rounded-lg bg-blue-600 px-4 py-3 text-xl font-bold text-white shadow-sm hover:bg-blue-700">
           <span>⇩</span> Download
         </a>
