@@ -1,16 +1,44 @@
-# React + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 📚 ReactJS PYQ Downloader
 
-Currently, two official plugins are available:
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+**A modern, fast, and user-friendly web application built with React to help students easily browse, search, and download Previous Year Question (PYQ) papers.**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+[View Live Demo](#) 
+·
+[Report Bug](https://github.com/subrataroy912/reactjs-pyq-downloader/issues)
+·
+[Request Feature](https://github.com/subrataroy912/reactjs-pyq-downloader/issues)
 
-## Expanding the ESLint configuration
+</div>
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 📖 About The Project
+
+Finding previous year's question papers right before exams can be a hassle. **ReactJS PYQ Downloader** solves this problem by providing a centralized, easy-to-navigate interface where students can find their respective university/college PYQs, filter them by semester or subject, and download them in a single click.
+
+### ✨ Key Features
+
+*   **🎓 Course & Semester Filtering:** Seamlessly filter question papers based on specific courses, years, and semesters.
+*   **📄 One-Click Download:** Instantly download PYQs in PDF format.
+*   **🔍 Search Functionality:** Quickly find specific subjects using the search bar.
+*   **📱 Fully Responsive:** Beautiful and functional across all devices (Mobile, Tablet, Desktop).
+*   **⚡ Blazing Fast:** Built with React for a smooth, single-page application experience.
+
+---
+
+## 🛠️ Tech Stack
+
+This project is built using modern web development technologies:
+
+*   **Frontend:** React.js
+*   **Styling:**Tailwind CSS *(update if you used a specific framework)*
+*   **Icons:** React Icons / FontAwesome
+*   **Build Tool:** Vite / Create React App
+
+---
