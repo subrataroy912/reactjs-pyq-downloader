@@ -37,7 +37,7 @@ Finding previous year's question papers right before exams can be a hassle. **Re
 This project is built using modern web development technologies:
 
 *   **Frontend:** React.js
-*   **Styling:**Tailwind CSS *(update if you used a specific framework)*
+*   **Styling:** Tailwind CSS *(update if you used a specific framework)*
 *   **Icons:** React Icons / FontAwesome
 *   **Build Tool:** Vite / Create React App
 
