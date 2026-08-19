@@ -1,9 +1,8 @@
 function Footer() {
   return (
-    <footer className="site-footer">
-     <div>
-       <p>&copy; 2026 Your Company. All rights reserved.</p>
-     </div>
+    <footer className="pb-4 pt-8 text-center text-lg text-slate-600">
+      <p>&copy; 2026 WB Diploma PYQ. All rights reserved.</p>
+      <p className="mt-3">Unofficial student resource</p>
     </footer>
   )
 }
