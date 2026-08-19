@@ -71,7 +71,32 @@ export default function PyqShop() {
                         subject="Digital Electronics"
                         downloadLink="/path-to-your-pdf.pdf"
                     />
-                    
+                    <PyqCard
+                        branch="Electrical Engineering"
+                        year="2022"
+                        subject="Digital Electronics"
+                        downloadLink="/path-to-your-pdf.pdf"
+                    /><PyqCard
+                        branch="Electrical Engineering"
+                        year="2022"
+                        subject="Digital Electronics"
+                        downloadLink="/path-to-your-pdf.pdf"
+                    /><PyqCard
+                        branch="Electrical Engineering"
+                        year="2022"
+                        subject="Digital Electronics"
+                        downloadLink="/path-to-your-pdf.pdf"
+                    /><PyqCard
+                        branch="Electrical Engineering"
+                        year="2022"
+                        subject="Digital Electronics"
+                        downloadLink="/path-to-your-pdf.pdf"
+                    /><PyqCard
+                        branch="Electrical Engineering"
+                        year="2022"
+                        subject="Digital Electronics"
+                        downloadLink="/path-to-your-pdf.pdf"
+                    />
 
                 </div>
             </div>

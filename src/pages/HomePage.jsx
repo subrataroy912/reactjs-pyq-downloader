@@ -13,10 +13,10 @@ export default function HomePage() {
     },
     {
       id: 2,
-      title: "SBTE",
-      stateName: "Bihar",
-      logoSrc: "/path-to-bihar-logo.png",
-      linkTo: "/bihar"
+      title: "Coming Soon",
+      stateName: "_",
+      logoSrc: "#",
+      linkTo: "#"
     },
   ];
 
