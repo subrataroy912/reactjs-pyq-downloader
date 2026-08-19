@@ -1,46 +1,37 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
-export default function AllStateCard({ 
-  logoSrc, 
-  title, 
-  stateName, 
-  linkTo, 
-  ctaText = "Click to view/download all previous year question papers" // Default fallback text
-}) {
+function ComingSoonIcon() {
   return (
-    <div className="flex flex-col h-full w-full p-5 sm:p-6 bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-      
-      {/* Header Area (Logo & Titles) */}
-      <div className="flex items-center gap-3 sm:gap-4 mb-5 sm:mb-6">
-        <div className="flex-shrink-0 bg-gray-50 p-2 rounded-full border border-gray-100">
-          <img 
-            src={logoSrc} 
-            alt={`${title} Logo`} 
-            className="w-12 h-12 sm:w-14 sm:h-14 object-contain"
-          />
-        </div>
-        
-        <div className="flex flex-col">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 leading-tight">
-            {title}
-          </h2>
-          <span className="text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wide">
-            {stateName}
-          </span>
-        </div>
-      </div>
-      
-      {/* Call to Action Area (mt-auto pushes button to the bottom) */}
-      <div className="mt-auto">
-        <Link 
-          to={linkTo}
-          className="inline-flex items-center justify-center w-full px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors text-center"
-        >
-          {ctaText}
-        </Link>
-      </div>
-      
+    <div className="mx-auto mb-7 flex h-36 w-36 items-center justify-center rounded-full bg-blue-50 text-slate-500">
+      <svg viewBox="0 0 64 64" className="h-20 w-20" fill="none" aria-hidden="true">
+        <path d="M18 10h20l10 10v30a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V14a4 4 0 0 1 4-4Z" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
+        <path d="M38 10v12h10M22 29h12M22 39h9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="45" cy="43" r="12" fill="#eff6ff" stroke="currentColor" strokeWidth="3" />
+        <path d="M45 36v8l5 4" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
     </div>
-  );
+  )
+}
+
+export default function AllStateCard({ logoSrc, title, stateName, linkTo, disabled = false }) {
+  const cardContent = (
+    <div className="flex min-h-[330px] flex-col items-center rounded-2xl border border-slate-200 bg-white px-8 py-9 text-center shadow-[0_8px_24px_rgba(15,23,42,0.10)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(15,23,42,0.12)]">
+      {disabled ? (
+        <ComingSoonIcon />
+      ) : (
+        <img src={logoSrc} alt={`${title} logo`} className="mb-7 h-36 w-36 object-contain" />
+      )}
+
+      <h2 className="text-3xl font-extrabold tracking-tight text-black">{title}</h2>
+      {!disabled && <p className="mt-2 text-xl font-medium uppercase tracking-wide text-slate-500">{stateName}</p>}
+
+      <span className={`mt-auto inline-flex w-full items-center justify-center rounded-xl px-5 py-4 text-base font-medium ${disabled ? 'bg-slate-100 text-slate-600' : 'bg-sky-300 text-white hover:bg-sky-400'}`}>
+        Click to view/download all previous year question papers
+      </span>
+    </div>
+  )
+
+  if (disabled) return <div aria-disabled="true">{cardContent}</div>
+
+  return <Link to={linkTo}>{cardContent}</Link>
 }
