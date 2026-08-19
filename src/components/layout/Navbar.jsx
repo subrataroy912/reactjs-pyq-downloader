@@ -1,30 +1,30 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 function Navbar() {
   return (
-    <header className="top-navbar">
-      <div className="nav-inner">
-        <div className="brand-block">
-          <div className="brand-icon">📖</div>
-          <div className="brand-text">
-            <span className="brand-title">WB Diploma PYQ</span>
-            <span className="brand-subtitle">Previous Year Question Papers</span>
-          </div>
+    <header className="bg-white border-b border-gray-100 shadow-sm py-3 px-4 sm:px-6 md:px-12 lg:px-20 flex items-center w-full">
+      
+      <Link 
+        to="/" 
+        className="inline-flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-100 rounded-lg p-1"
+      >
+        <div className="text-xl sm:text-2xl bg-blue-50 p-1.5 sm:p-2 rounded-lg flex items-center justify-center shrink-0">
+          📖
         </div>
-
-        <nav className="main-nav" aria-label="Main navigation">
-          <a href="/" className="active">Home</a>
-          <a href="/branches">Branches</a>
-          <a href="/semesters">Semesters</a>
-          <a href="/latest-papers">Latest Papers</a>
-          <a href="/about">About</a>
-        </nav>
-
-        <div className="nav-actions">
-          <button type="button" className="icon-button" aria-label="Search">⌕</button>
-          <button type="button" className="icon-button" aria-label="Theme">◉</button>
+        
+        <div className="flex flex-col">
+          <span className="font-bold text-base sm:text-lg md:text-xl text-gray-900 leading-tight">
+            WB Diploma PYQ
+          </span>
+          <span className="text-[10px] sm:text-xs md:text-sm text-gray-500 font-medium truncate max-w-[200px] sm:max-w-none">
+            Previous Year Question Papers
+          </span>
         </div>
-      </div>
+      </Link>
+      
     </header>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;
