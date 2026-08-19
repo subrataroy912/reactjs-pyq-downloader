@@ -58,27 +58,27 @@ export default function PyqShop() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-screen-2xl px-3 py-5 sm:px-5 sm:py-7 md:px-7 md:py-8">
-      <section className="mb-5 grid grid-cols-1 items-end gap-4 sm:mb-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-[minmax(320px,1.55fr)_minmax(180px,0.56fr)_minmax(180px,0.56fr)_minmax(150px,0.46fr)_minmax(180px,0.52fr)] xl:gap-6">
-        <label className="relative block sm:col-span-2 lg:col-span-4 xl:col-span-1">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-slate-700 sm:left-5 sm:text-3xl lg:left-7 lg:text-4xl">⌕</span>
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search subject name..." className="h-14 w-full rounded-xl border border-slate-200 bg-white pl-14 pr-4 text-base shadow-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100 sm:h-16 sm:pl-16 sm:text-xl lg:h-20 lg:pl-20 lg:text-2xl xl:h-24 xl:pl-24 xl:text-3xl" />
+    <main className="px-5 py-8 md:px-7">
+      <section className="mb-7 grid grid-cols-1 items-end gap-6 xl:grid-cols-[1.55fr_0.56fr_0.56fr_0.46fr_0.52fr]">
+        <label className="relative block">
+          <span className="absolute left-7 top-1/2 -translate-y-1/2 text-4xl text-slate-700">⌕</span>
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search subject name..." className="h-24 w-full rounded-xl border border-slate-200 bg-white pl-24 pr-6 text-3xl shadow-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100" />
         </label>
         {[['Branch', branch, setBranch, ['CST', 'EE', 'ECE', 'ME', 'CE', 'HM', 'Common'], 'All Branches'], ['Semester', semester, setSemester, ['1st Semester', '2nd Semester', '3rd Semester', '4th Semester', '5th Semester', '6th Semester'], 'All Semesters'], ['Year', year, setYear, ['2025', '2024', '2023', '2022'], 'All Years']].map(([label, value, setter, options, all]) => (
           <label key={label} className="block">
-            <span className="mb-1.5 block text-base font-semibold text-slate-900 sm:text-lg lg:mb-2 lg:text-xl xl:text-2xl">{label}</span>
-            <select value={value} onChange={(e) => setter(e.target.value)} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-base shadow-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100 sm:h-14 sm:text-lg lg:h-16 lg:px-5 lg:text-xl xl:h-20 xl:px-6 xl:text-2xl">
+            <span className="mb-2 block text-2xl font-semibold text-slate-900">{label}</span>
+            <select value={value} onChange={(e) => setter(e.target.value)} className="h-20 w-full rounded-xl border border-slate-200 bg-white px-6 text-2xl shadow-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100">
               <option value="">{all}</option>
               {options.map((option) => <option key={option} value={option}>{option}</option>)}
             </select>
           </label>
         ))}
-        <button onClick={clearFilters} className="h-12 rounded-xl border border-slate-200 bg-white px-4 text-base font-bold text-slate-950 shadow-sm hover:bg-slate-50 sm:h-14 sm:text-lg lg:h-16 lg:text-xl xl:h-20 xl:px-6 xl:text-2xl">↻ Clear Filters</button>
+        <button onClick={clearFilters} className="h-20 rounded-xl border border-slate-200 bg-white px-6 text-2xl font-bold text-slate-950 shadow-sm hover:bg-slate-50">↻ Clear Filters</button>
       </section>
 
-      <p className="mb-5 flex items-center gap-2 text-base text-slate-800 sm:mb-6 sm:text-lg lg:mb-7 lg:gap-4 lg:text-2xl"><span className="text-blue-600">ⓘ</span> Showing {filteredPapers.length} papers</p>
+      <p className="mb-7 flex items-center gap-4 text-2xl text-slate-800"><span className="text-blue-600">ⓘ</span> Showing {filteredPapers.length} papers</p>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4 xl:gap-7">
+      <section className="grid grid-cols-1 gap-7 md:grid-cols-2 xl:grid-cols-4">
         {filteredPapers.map((paper) => <PyqCard key={paper.id} {...paper} />)}
       </section>
     </main>
