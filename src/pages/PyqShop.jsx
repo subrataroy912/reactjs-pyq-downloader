@@ -1,59 +1,70 @@
 import { useEffect, useMemo, useState } from 'react';
 import Dropdown from '../components/common/Dropdown';
+import useDebouncedValue from '../hooks/useDebouncedValue';
+import useMediaQuery from '../hooks/useMediaQuery';
 import PyqCard from '../components/common/PyqCard';
 
-const papers = [
-  ['Mathematics – 1', 'CST', '1st Semester', 'Jan 2025', '1.2 MB', true],
-  ['Mathematics – 1', 'CST', '1st Semester', 'Jun 2024', '1.1 MB'],
-  ['Physics', 'CST', '1st Semester', 'Jan 2025', '1.3 MB', true],
-  ['Chemistry', 'CST', '1st Semester', 'Jun 2024', '1.2 MB'],
-  ['Basic Electrical Engineering', 'EE', '3rd Semester', 'Jan 2025', '1.4 MB'],
-  ['Analog Electronics', 'ECE', '3rd Semester', 'Jan 2025', '1.3 MB', true],
-  ['Data Structures', 'CST', '3rd Semester', 'Jun 2024', '1.2 MB'],
-  ['Computer Organization', 'CST', '3rd Semester', 'Jan 2024', '1.1 MB'],
-  ['Engineering Mechanics', 'ME', '2nd Semester', 'Jan 2025', '1.2 MB'],
-  ['Thermodynamics', 'ME', '2nd Semester', 'Jun 2024', '1.3 MB'],
-  ['Communication Skills', 'HM', '1st Semester', 'Jan 2025', '1.0 MB', true],
-  ['Environmental Science', 'Common', '2nd Semester', 'Jun 2024', '1.1 MB'],
-  ['Surveying', 'CE', '4th Semester', 'Jan 2024', '1.5 MB'],
-  ['Microprocessor', 'CST', '4th Semester', 'Jun 2023', '1.4 MB'],
-  ['Power System', 'EE', '5th Semester', 'Jan 2023', '1.6 MB'],
-  ['Machine Design', 'ME', '5th Semester', 'Jun 2022', '1.5 MB'],
-  ['Database Management System', 'CST', '4th Semester', 'Jan 2025', '1.2 MB', true],
-  ['Concrete Technology', 'CE', '3rd Semester', 'Jun 2024', '1.3 MB'],
-  ['Digital Electronics', 'ECE', '2nd Semester', 'Jan 2024', '1.2 MB'],
-  ['Programming in C', 'CST', '2nd Semester', 'Jun 2024', '1.1 MB'],
-  ['Electrical Machines', 'EE', '4th Semester', 'Jan 2025', '1.5 MB', true],
-  ['Fluid Mechanics', 'ME', '3rd Semester', 'Jun 2023', '1.4 MB'],
-  ['Building Materials', 'CE', '2nd Semester', 'Jan 2023', '1.2 MB'],
-  ['Industrial Management', 'Common', '6th Semester', 'Jun 2024', '1.0 MB'],
-].map(([subject, branch, semester, year, size, isNew], index) => ({
-  id: index + 1,
-  subject,
-  branch,
-  semester,
-  year,
-  size,
-  isNew: Boolean(isNew),
-  downloadLink: '',
-}));
+const DATA_URL = '/data/papers.json';
+const NEW_PAPER_WINDOW_DAYS = 30;
+
+function isRecentlyUploaded(uploadedAt) {
+  if (!uploadedAt) return false;
+
+  const uploadedDate = new Date(uploadedAt);
+  if (Number.isNaN(uploadedDate.getTime())) return false;
+
+  const ageInDays = (Date.now() - uploadedDate.getTime()) / (1000 * 60 * 60 * 24);
+  return ageInDays >= 0 && ageInDays <= NEW_PAPER_WINDOW_DAYS;
+}
 
 export default function PyqShop() {
   const [search, setSearch] = useState('');
   const [branch, setBranch] = useState('');
   const [semester, setSemester] = useState('');
   const [year, setYear] = useState('');
-  
+  const [papers, setPapers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const isMobile = useMediaQuery('(max-width: 767px)');
+  const debouncedSearch = useDebouncedValue(search);
 
   const filteredPapers = useMemo(() => {
     return papers.filter((paper) => (
-      paper.subject.toLowerCase().includes(search.toLowerCase()) &&
+      paper.subject.toLowerCase().includes(debouncedSearch.toLowerCase()) &&
       (!branch || paper.branch === branch) &&
       (!semester || paper.semester === semester) &&
       (!year || paper.year.match(/\b(\d{4})\b/)?.[1] === year)
     ));
-  }, [search, branch, semester, year]);
+  }, [papers, debouncedSearch, branch, semester, year]);
+
+  const loadPapers = async () => {
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch(DATA_URL);
+
+      if (!response.ok) {
+        throw new Error('Unable to load paper data.');
+      }
+
+      const paperData = await response.json();
+      setPapers(paperData.map((paper) => ({
+        ...paper,
+        isNew: isRecentlyUploaded(paper.uploadedAt),
+      })));
+    } catch (loadError) {
+      setError(loadError.message || 'Unable to load paper data.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(loadPapers, 0);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
 
   useEffect(() => {
     document.body.classList.toggle('overflow-hidden', isSidebarOpen);
@@ -62,7 +73,7 @@ export default function PyqShop() {
   }, [isSidebarOpen]);
 
   const closeSidebarOnMobile = () => {
-    if (window.matchMedia('(max-width: 767px)').matches) {
+    if (isMobile) {
       setIsSidebarOpen(false);
     }
   };
@@ -88,10 +99,10 @@ export default function PyqShop() {
 
   return (
     <main className="mx-auto max-w-[1400px] px-4 py-6 md:px-6 lg:py-8">
-      
+
       {/* Mobile Filter Toggle Button */}
       <div className="mb-4 flex items-center justify-between md:hidden">
-        <button 
+        <button
           onClick={() => setIsSidebarOpen(true)}
           className="flex h-9 items-center gap-2 rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
@@ -114,15 +125,15 @@ export default function PyqShop() {
 
       {/* Filters Section (Sidebar on Mobile, Inline on Desktop) */}
       <section className={`
-        fixed inset-y-0 left-0 z-50 flex w-[280px] flex-col gap-5 bg-white p-5 shadow-2xl transition-transform duration-300 ease-in-out 
+        fixed inset-y-0 left-0 z-50 flex w-[280px] flex-col gap-5 bg-white p-5 shadow-2xl transition-transform duration-300 ease-in-out
         md:static md:mb-6 md:w-auto md:translate-x-0 md:flex-row md:items-end md:bg-transparent md:p-0 md:shadow-none lg:gap-4
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        
+
         {/* Mobile Sidebar Header */}
         <div className="flex items-center justify-between md:hidden">
           <h2 className="text-lg font-semibold text-slate-800">Filters</h2>
-          <button 
+          <button
             type="button"
             onClick={() => setIsSidebarOpen(false)}
             aria-label="Close filters"
@@ -144,11 +155,11 @@ export default function PyqShop() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                 </svg>
               </span>
-              <input 
-                value={search} 
-                onChange={(e) => setSearch(e.target.value)} 
-                placeholder="E.g., Mathematics..." 
-                className="h-9 w-full rounded-md border border-slate-300 bg-white pl-9 pr-3 text-sm shadow-sm outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500" 
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="E.g., Mathematics..."
+                className="h-9 w-full rounded-md border border-slate-300 bg-white pl-9 pr-3 text-sm shadow-sm outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
           </label>
@@ -156,7 +167,7 @@ export default function PyqShop() {
 
         {/* Filters and Clear Button Container */}
         <div className="flex w-full flex-col gap-4 md:w-auto md:flex-row md:items-end lg:gap-4">
-          
+
           {/* Dropdowns */}
           {filterOptions.map(({ id, label, value, setter, options, allLabel }) => (
             <Dropdown
@@ -173,8 +184,8 @@ export default function PyqShop() {
 
           {/* Clear Button */}
           <div className="mt-2 flex h-full flex-col justify-end w-full md:mt-0 md:w-[90px] lg:w-[100px]">
-            <button 
-              onClick={clearFilters} 
+            <button
+              onClick={clearFilters}
               className="flex h-9 w-full items-center justify-center gap-1.5 rounded-md border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50 focus:outline-none focus:ring-1 focus:ring-slate-300"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="h-4 w-4">
@@ -187,14 +198,32 @@ export default function PyqShop() {
       </section>
 
       {/* Results Count */}
-      <p className="mb-4 flex items-center gap-1.5 text-xs text-slate-600 sm:text-sm">
+      <p aria-live="polite" className="mb-4 flex items-center gap-1.5 text-xs text-slate-600 sm:text-sm">
         <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-blue-100 text-[10px] font-bold text-blue-600">
           i
-        </span> 
+        </span>
         Showing <strong className="font-semibold text-slate-900">{filteredPapers.length}</strong> papers
       </p>
 
+      {isLoading && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-6" aria-label="Loading papers">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className="h-56 animate-pulse rounded-2xl bg-slate-100" />
+          ))}
+        </div>
+      )}
+
+      {error && (
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+          <p className="font-semibold">{error}</p>
+          <button type="button" onClick={loadPapers} className="mt-3 rounded-lg bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700">
+            Retry
+          </button>
+        </div>
+      )}
+
       {/* Cards Grid */}
+      {!isLoading && !error && (
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-6">
         {filteredPapers.map((paper) => (
           <PyqCard key={paper.id} {...paper} />
@@ -205,7 +234,8 @@ export default function PyqShop() {
           </div>
         )}
       </section>
-      
+      )}
+
     </main>
   );
 }

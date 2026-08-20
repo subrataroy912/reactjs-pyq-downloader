@@ -47,3 +47,13 @@ This project is built using modern web development technologies:
 *   **Build Tool:** Vite / Create React App
 
 ---
+
+## 🗂️ Paper Data
+
+Paper listings are loaded from `public/data/papers.json` at runtime so contributors can add or update papers without editing React component code. Each entry should include:
+
+* `id`, `subject`, `branch`, `semester`, `year`, and `size` for display and filtering.
+* `uploadedAt` in `YYYY-MM-DD` format; the app automatically shows the **New** badge for papers uploaded in the last 30 days.
+* `downloadLink` with a working hosted paper URL. Do not leave this blank unless the paper is intentionally unavailable; blank links render a disabled **PDF coming soon** button and should not be considered a complete listing.
+
+The current data file uses publicly indexed WBSCTE paper pages as source links. If you add self-hosted PDFs or a backend API later, keep the same JSON field names or update the loader in `src/pages/PyqShop.jsx`.
