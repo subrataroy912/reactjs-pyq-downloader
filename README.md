@@ -16,6 +16,11 @@
 
 </div>
 
+<div style="display: flex; justify-content: center; gap: 20px;">
+  <img src="./public/Main_Home_page.png" alt="First Image" width="45%">
+  <img src="./public//pyqs-showing-page.png" alt="Second Image" width="45%">
+</div>
+
 ---
 
 ## 📖 About The Project
