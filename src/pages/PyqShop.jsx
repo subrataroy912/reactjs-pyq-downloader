@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import Dropdown from '../components/common/Dropdown';
 import PyqCard from '../components/common/PyqCard';
 
 const papers = [
@@ -34,7 +35,7 @@ const papers = [
   year,
   size,
   isNew: Boolean(isNew),
-  downloadLink: '/path-to-your-pdf.pdf',
+  downloadLink: '',
 }));
 
 export default function PyqShop() {
@@ -43,7 +44,6 @@ export default function PyqShop() {
   const [semester, setSemester] = useState('');
   const [year, setYear] = useState('');
   
-  // New state for mobile sidebar
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const filteredPapers = useMemo(() => {
@@ -51,21 +51,39 @@ export default function PyqShop() {
       paper.subject.toLowerCase().includes(search.toLowerCase()) &&
       (!branch || paper.branch === branch) &&
       (!semester || paper.semester === semester) &&
-      (!year || paper.year.includes(year))
+      (!year || paper.year.match(/\b(\d{4})\b/)?.[1] === year)
     ));
   }, [search, branch, semester, year]);
+
+  useEffect(() => {
+    document.body.classList.toggle('overflow-hidden', isSidebarOpen);
+
+    return () => document.body.classList.remove('overflow-hidden');
+  }, [isSidebarOpen]);
+
+  const closeSidebarOnMobile = () => {
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      setIsSidebarOpen(false);
+    }
+  };
+
+  const updateFilter = (setter) => (value) => {
+    setter(value);
+    closeSidebarOnMobile();
+  };
 
   const clearFilters = () => {
     setSearch('');
     setBranch('');
     setSemester('');
     setYear('');
+    closeSidebarOnMobile();
   };
 
   const filterOptions = [
-    { label: 'Branch', value: branch, setter: setBranch, options: ['CST', 'EE', 'ECE', 'ME', 'CE', 'HM', 'Common'], allLabel: 'All Branches' },
-    { label: 'Semester', value: semester, setter: setSemester, options: ['1st Semester', '2nd Semester', '3rd Semester', '4th Semester', '5th Semester', '6th Semester'], allLabel: 'All Semesters' },
-    { label: 'Year', value: year, setter: setYear, options: ['2025', '2024', '2023', '2022'], allLabel: 'All Years' },
+    { id: 'branch-filter', label: 'Branch', value: branch, setter: setBranch, options: ['CST', 'EE', 'ECE', 'ME', 'CE', 'HM', 'Common'], allLabel: 'All Branches' },
+    { id: 'semester-filter', label: 'Semester', value: semester, setter: setSemester, options: ['1st Semester', '2nd Semester', '3rd Semester', '4th Semester', '5th Semester', '6th Semester'], allLabel: 'All Semesters' },
+    { id: 'year-filter', label: 'Year', value: year, setter: setYear, options: ['2025', '2024', '2023', '2022'], allLabel: 'All Years' },
   ];
 
   return (
@@ -86,7 +104,9 @@ export default function PyqShop() {
 
       {/* Mobile Backdrop Overlay */}
       {isSidebarOpen && (
-        <div 
+        <button
+          type="button"
+          aria-label="Close filters"
           className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -103,8 +123,10 @@ export default function PyqShop() {
         <div className="flex items-center justify-between md:hidden">
           <h2 className="text-lg font-semibold text-slate-800">Filters</h2>
           <button 
+            type="button"
             onClick={() => setIsSidebarOpen(false)}
-            className="rounded-md p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+            aria-label="Close filters"
+            className="rounded-md p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -136,20 +158,17 @@ export default function PyqShop() {
         <div className="flex w-full flex-col gap-4 md:w-auto md:flex-row md:items-end lg:gap-4">
           
           {/* Dropdowns */}
-          {filterOptions.map(({ label, value, setter, options, allLabel }) => (
-            <label key={label} className="block w-full md:w-[130px] lg:w-[150px]">
-              <span className="mb-1.5 block text-xs font-medium text-slate-700">{label}</span>
-              <select 
-                value={value} 
-                onChange={(e) => setter(e.target.value)} 
-                className="h-9 w-full rounded-md border border-slate-300 bg-white px-2.5 text-sm shadow-sm outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              >
-                <option value="">{allLabel}</option>
-                {options.map((option) => (
-                  <option key={option} value={option}>{option}</option>
-                ))}
-              </select>
-            </label>
+          {filterOptions.map(({ id, label, value, setter, options, allLabel }) => (
+            <Dropdown
+              key={id}
+              id={id}
+              label={label}
+              value={value}
+              onChange={(event) => updateFilter(setter)(event.target.value)}
+              options={options}
+              defaultOptionLabel={allLabel}
+              className="md:w-[130px] lg:w-[150px]"
+            />
           ))}
 
           {/* Clear Button */}
