@@ -35,7 +35,7 @@ function Navbar() {
         />
         
         <div className="flex flex-col justify-center">
-          <h1 
+          <span 
             className={`font-bold tracking-tight text-slate-900 ${
               isPapersPage 
                 ? 'text-base sm:text-lg md:text-xl line-clamp-2 md:line-clamp-1' 
@@ -43,7 +43,7 @@ function Navbar() {
             }`}
           >
             {isPapersPage ? 'WBSCTE Previous Year Question Papers' : 'WB Diploma PYQ'}
-          </h1>
+          </span>
           
           {/* Subtitle - only shows on the main page */}
           {!isPapersPage && (
